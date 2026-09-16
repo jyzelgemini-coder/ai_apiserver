@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        var globalObj = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : self);
+        if (!globalObj) return;
+        try {
+          var rawFetch = globalObj.fetch;
+          var currentFetch = typeof rawFetch === 'function' ? rawFetch.bind(globalObj) : rawFetch;
+
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            try {
+              var protoDesc = Object.getOwnPropertyDescriptor(Window.prototype, 'fetch');
+              if (protoDesc && protoDesc.get && !protoDesc.set) {
+                Object.defineProperty(Window.prototype, 'fetch', {
+                  get: function() { return currentFetch; },
+                  set: function(val) { currentFetch = val; },
+                  configurable: true,
+                  enumerable: true
+                });
+              }
+            } catch (e) {}
+          }
+
+          try {
+            var winDesc = Object.getOwnPropertyDescriptor(globalObj, 'fetch');
+            if (!winDesc || (winDesc.get && !winDesc.set) || !winDesc.writable) {
+              Object.defineProperty(globalObj, 'fetch', {
+                get: function() { return currentFetch; },
+                set: function(val) { currentFetch = val; },
+                configurable: true,
+                enumerable: true
+              });
+            }
+          } catch (e) {}
+
+          var originalDefineProperty = Object.defineProperty;
+          Object.defineProperty = function(obj, prop, descriptor) {
+            try {
+              if ((obj === globalObj || (typeof Window !== 'undefined' && obj === Window.prototype)) && prop === 'fetch' && descriptor) {
+                if (descriptor.get && !descriptor.set) {
+                  var storedVal;
+                  var origGet = descriptor.get;
+                  descriptor.set = function(v) {
+                    storedVal = v;
+                    currentFetch = v;
+                  };
+                  descriptor.get = function() {
+                    return storedVal !== undefined ? storedVal : origGet.call(this);
+                  };
+                }
+              }
+            } catch (err) {}
+            return originalDefineProperty.call(Object, obj, prop, descriptor);
+          };
+        } catch (err) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI - High Security Gateway & CDK Portal</title>
+    <meta name="description" content="Enterprise-grade high security AI gateway and CDK redemption portal powered by 𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI. Features AES-256 encryption, anti-brute-force defense, live token quota diagnostics, and seamless VS Code integration." />
+    <meta property="og:title" content="𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI - High Security Gateway & CDK Portal" />
+    <meta property="og:description" content="Enterprise-grade high security AI gateway and CDK redemption portal powered by 𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI. Features AES-256 encryption, anti-brute-force defense, live token quota diagnostics, and seamless VS Code integration." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="bg-[#06080e] text-slate-100 min-h-screen antialiased" style="background-color: #06080e; color: #f1f5f9;">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

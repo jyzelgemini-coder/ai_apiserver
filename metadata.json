@@ -1,0 +1,6 @@
+{
+  "name": "𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI - High Security Gateway & CDK Portal",
+  "description": "Enterprise-grade high security AI gateway and CDK redemption portal powered by 𝐒𝐨𝐌𝐚𝐃𝐞𝐭𝐡 AI. Features AES-256 encryption, anti-brute-force defense, live token quota diagnostics, and seamless VS Code integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
